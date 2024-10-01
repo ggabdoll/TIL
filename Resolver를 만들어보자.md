@@ -68,7 +68,7 @@ public SampleListResponseDto gajyeowaList(@RequestParam  Map<String, Object> que
 > 📌 @NotNull, @Size 등과 같은 Validate 어노테이션이 잘 작동된다.
 ###### 정리 끝 이제 만들자💪💪
 #### @Annotation 만들기
-resolver 작동 트리거인 Anotation을 만들거다.
+resolver 작동 트리거인 Annotation을 만들거다.
 ```java
 @Retention(RetentionPolicy.RUNTIME)  
 @Target(ElementType.PARAMETER)  
@@ -79,3 +79,4 @@ public @interface QueryString {
 }
 ```
 
+우선 만듦
