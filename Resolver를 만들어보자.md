@@ -1,8 +1,8 @@
 
-Resolver를 만들고 싶은 욕구와 필요하다는 느낌이 강하게 온다.
+### 📍 Resolver를 만들고 싶은 욕구와 필요하다는 느낌이 강하게 온다.
 그럼 만들어야지~!~!
 
-### 상황
+### 🕺상황
 Spring에서 queryString을 받을 때 Controller의 메서드의 기본 형태는 아래와 같다.
 
 ```java
@@ -17,6 +17,7 @@ public SampleListResponseDto gajyeowaList(@RequestParam String name, @RequestPar
 > 또한, 검색조건 하나더 추가 했다고 생각해보자, controller 수정, service 수정 해야 한다.
 
 고래서 아래와 같은 형태로 많이 쓴다.
+</br>
 
 ```java
 @GetMapping("")
@@ -32,6 +33,7 @@ public SampleListResponseDto gajyeowaList(@RequestParam  Map<String, Object> que
 > 	3. 너무 유연하다.
 
 고래서 또 이런 형태를 전환 하였다.
+</br>
 ```java
 ```java
 
@@ -54,10 +56,8 @@ public SampleListResponseDto gajyeowaList(@RequestParam  Map<String, Object> que
 > service에서 value를 꺼내올때, getMethod를 사용해서 가져올 수 도 있다.
 > 형태가 괜찮아 보이는데, 저 JsonMapper로 convertValue시 매핑하는 정책을 적어주는 것이 외워도 볼려고 하고 이해하고 외워도 봤는데, 결국 복붙이 답이었다. 
 > 좀 더 컴팩트 하게 할 수 있지 않을까 그리고 DTO에서 validation이 필요할때 service까지 가지 않고 할 수 있지 않을까?? (Like @RequestBody)
-
-
-##### 고래서 Resolver를 만들어 볼려고 한다!!!!!
-### HandlerMethodArgumentResolver
+##### ❗️ 고래서 Resolver를 만들어 볼려고 한다!!!!!
+### 🤷‍♂️ HandlerMethodArgumentResolver
 요거를 커스텀 구현할 것이다.
 요게 무어냐면 요 게시글에 정리해 두었다. 요거보면 된다.
 
@@ -67,7 +67,7 @@ public SampleListResponseDto gajyeowaList(@RequestParam  Map<String, Object> que
 > 📌 매핑시 @JsonProperty, @JsonIgnore등이 잘 작동된다.
 > 📌 @NotNull, @Size 등과 같은 Validate 어노테이션이 잘 작동된다.
 ###### 정리 끝 이제 만들자💪💪
-#### @Annotation 만들기
+#### 1. @Annotation 만들기
 resolver 작동 트리거인 Annotation을 만들거다.
 ```java
 @Retention(RetentionPolicy.RUNTIME)  
@@ -81,7 +81,7 @@ public @interface QueryString {
 
 보면 알겠지만, 네이밍이 구리긴 하다. 그래도 일단 직직직관 적인 이름으로 만들어 보았다.
 
-### Resolver 만들기!
+### 2. Resolver 만들기!
 나는 `HandlerMethodArgumentResolver` 요걸 하나 만들어줄 거기 때문에
 ```java
 public class QueryStringArgumentResolver implements HandlerMethodArgumentResolver {
@@ -105,7 +105,7 @@ public class QueryStringArgumentResolver implements HandlerMethodArgumentResolve
 > `supportsParameter` : 파라미터를 보면 MethodParameter를 받고 있다. 간단하다. parameter의 상태가 어떨때 아래의 `resolveArgument`를 작동할지의 트리거를 정의 하는 곳이다.
 > 나는 @QueryString 어노테이션이 있을때 작동 하게 할 거기 때문에 요렇게 작성해준다.
 
-
+#### 2-1 resolver 트리거 설정
 ```java
 public class QueryStringArgumentResolver implements HandlerMethodArgumentResolver {
 
@@ -127,4 +127,7 @@ public class QueryStringArgumentResolver implements HandlerMethodArgumentResolve
 > `resolveArgument` : 요놈이 리얼 구현체 이다. 여기 안에서 querString을 DTO로 매핑 하고, 매핑할때 validation도 체크 해주는 로직이 여기 안에 작성하면 된다.
 
 
+#### 2-2 resolveArgument 구현
+내가 생각한 구현의 순서는 아래와 같다.
 
+queryString → Map → DTO
