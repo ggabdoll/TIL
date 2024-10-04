@@ -82,3 +82,49 @@ public @interface QueryString {
 보면 알겠지만, 네이밍이 구리긴 하다. 그래도 일단 직직직관 적인 이름으로 만들어 보았다.
 
 ### Resolver 만들기!
+나는 `HandlerMethodArgumentResolver` 요걸 하나 만들어줄 거기 때문에
+```java
+public class QueryStringArgumentResolver implements HandlerMethodArgumentResolver {
+
+  @Override
+  public boolean supportsParameter(MethodParameter parameter) {
+    return null;
+  }
+
+@Override  
+  public Object resolveArgument(MethodParameter parameter,  
+      ModelAndViewContainer mavContainer,  
+      NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {  
+   return null;
+}
+```
+
+> implements 해주고 override 해주면 요렇게 나올 것이다.
+> 
+> 하나씩 설명 하자면,
+> `supportsParameter` : 파라미터를 보면 MethodParameter를 받고 있다. 간단하다. parameter의 상태가 어떨때 아래의 `resolveArgument`를 작동할지의 트리거를 정의 하는 곳이다.
+> 나는 @QueryString 어노테이션이 있을때 작동 하게 할 거기 때문에 요렇게 작성해준다.
+
+
+```java
+public class QueryStringArgumentResolver implements HandlerMethodArgumentResolver {
+
+  @Override
+  public boolean supportsParameter(MethodParameter parameter) {
+    return parameter.getParameterAnnotation(RequestQuery.class) != null;
+  }
+
+@Override  
+  public Object resolveArgument(MethodParameter parameter,  
+      ModelAndViewContainer mavContainer,  
+      NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {  
+   return null;
+}
+```
+
+> 우선 resolver에 1단계는 완료 한 것 같다.
+> 
+> `resolveArgument` : 요놈이 리얼 구현체 이다. 여기 안에서 querString을 DTO로 매핑 하고, 매핑할때 validation도 체크 해주는 로직이 여기 안에 작성하면 된다.
+
+
+
