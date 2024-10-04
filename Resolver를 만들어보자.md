@@ -82,4 +82,3 @@ public @interface QueryString {
 보면 알겠지만, 네이밍이 구리긴 하다. 그래도 일단 직직직관 적인 이름으로 만들어 보았다.
 
 ### Resolver 만들기!
-
